@@ -51,7 +51,7 @@ function loadData() {
                 .attr("type", "none");
             
         }
-        console.log(data);
+        //console.log(data);
     })
     .fail(function() {
         $nytHeaderElem.html("New York Times Articles Could Not Be Loaded")
@@ -64,12 +64,42 @@ function loadData() {
     The AJAX function has the following parameters
         * the URL of the site to which the API request is sent
         * [the settings property]
-    The settings parameter has many properties, one of which is success
+    The settings parameter has many properties, including
         success: function(data) {
         // your code goes here
         }
-    
+        dataType: // eg json or jsonp
     */
+    // set up the URL
+    var wikiurl = "";
+    var strArray = street.split("");
+    for(var i = 0; i < strArray.length; i++) {
+        if(strArray[i] == " ")
+            wikiurl += "%20";
+        else if(strArray[i] == ".")
+            wikiurl += "%2E";
+        else 
+            wikiurl += strArray[i];
+    }
+    //console.log(wikiurl);
+    wikiurl = "https://en.wikipedia.org/w/api.php?action=opensearch&search="+wikiurl+"&format=json&callback=wikiCallback";
+    // now call the AJAX function properly
+    $.ajax({
+        url: wikiurl,
+        dataType: "jsonp",
+        success: function(data) {
+            var titles = data[1];
+            var links = data[3];
+            var l = titles.length;
+            for(var i = 0; i < l; i++) {
+                $wikiElem.append(
+                    "<li> <a href='" +links[i] +"' target='_blank'>" + titles[i] + "</a></li>"
+                )
+                    .attr("style", "line-height: 1.5em;");
+            }
+            console.log(data);
+        }
+    });
     
     return false;
 };
