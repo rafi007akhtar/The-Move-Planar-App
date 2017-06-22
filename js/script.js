@@ -83,6 +83,10 @@ function loadData() {
     }
     //console.log(wikiurl);
     wikiurl = "https://en.wikipedia.org/w/api.php?action=opensearch&search="+wikiurl+"&format=json&callback=wikiCallback";
+    // set a timeout to handle errors
+    var timeout = setTimeout(function() {
+        $("#wikipedia-header").text("Failed to load wikipedia articles")
+    }, 10000);
     // now call the AJAX function properly
     $.ajax({
         url: wikiurl,
@@ -95,9 +99,11 @@ function loadData() {
                 $wikiElem.append(
                     "<li> <a href='" +links[i] +"' target='_blank'>" + titles[i] + "</a></li>"
                 )
-                    .attr("style", "line-height: 1.5em;");
+                    .attr("style", "line-height: 1.5em;")
+                    .attr("type", "none");
             }
-            console.log(data);
+            clearTimeout(timeout);
+            console.log(data);            
         }
     });
     
