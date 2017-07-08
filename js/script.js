@@ -30,6 +30,7 @@ function loadData() {
     //$(".bgmig").attr("src", url);
     var style = "background-image: url(" + url + ");"
     $body.attr("background", url);
+    $body.css("background-size", "cover")
     
     // set up NYT API articles
     
@@ -40,7 +41,9 @@ function loadData() {
     [] means this is optional
     */
     var nyurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=" + street + "&sort=newest&api-key=736806e5c4ff4b85887dc530591812f5";
+    //var nyurl = "https://random-quote-generator.herokuapp.com/api/quotes/random";
     $.getJSON(nyurl, function(data) {
+        console.log(data);
         var articles = data.response.docs;
         var l = articles.length;
         for(var i = 0; i < l; i++) {
@@ -51,7 +54,6 @@ function loadData() {
                 .attr("type", "none");
             
         }
-        //console.log(data);
     })
     .fail(function() {
         $nytHeaderElem.html("New York Times Articles Could Not Be Loaded")
@@ -92,6 +94,7 @@ function loadData() {
         url: wikiurl,
         dataType: "jsonp",
         success: function(data) {
+            console.log(data);
             var titles = data[1];
             var links = data[3];
             var l = titles.length;
@@ -103,7 +106,6 @@ function loadData() {
                     .attr("type", "none");
             }
             clearTimeout(timeout);
-            console.log(data);            
         }
     });
     
